@@ -4,28 +4,34 @@ import {observer} from 'mobx-react-lite';
 import {useAppStore} from '../stores/appStore';
 import CustomButton from './CustomButton';
 
-const ModalButtonsContainer = observer(() => {
+type CardButtonsContainerProps = {
+    goBack: () => void
+};
+
+const CardButtonsContainer = observer(({goBack}: CardButtonsContainerProps) => {
     const store = useAppStore();
-    
+
     function onResetTaskPress() {
         store.handleResetTaskPress();
     }
 
     function onAddNewTaskPress() {
         store.handleAddTaskPress();
+        goBack();
     }
 
     function onSaveTaskPress() {
         store.handleSaveTaskPress();
+        goBack();
     }
 
     function onDeleteSelectedTaskPress() {
-        store.setIsOpenedModal(false);
+        goBack();
         store.handleDeleteTaskPress();
     }
 
     function onCloseModalPress() {
-        store.setIsOpenedModal(false);
+        goBack();
     }
 
     return (
@@ -76,4 +82,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ModalButtonsContainer;
+export default CardButtonsContainer;

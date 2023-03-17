@@ -17,12 +17,14 @@ import CustomButton from './CustomButton';
 
 type TaskProps = {
     task: TaskType,
-    index: number
+    index: number,
+    goToTaskCard: () => void
 };
 
 const Task = observer(({
                            index,
-                           task
+                           task,
+                           goToTaskCard
                        }: TaskProps) => {
     const store = useAppStore();
 
@@ -46,8 +48,11 @@ const Task = observer(({
 
     const onTaskPress = useCallback(() => store.handleTaskPress(task.id),
         [store.handleTaskPress, task.id]);
-    const onEditPress = useCallback(() => store.handleEditPress(task.id),
-        [store.handleEditPress, task.id]);
+    const onEditPress = useCallback(() => {
+            store.handleEditPress(task.id);
+            goToTaskCard();
+        },
+        [store.handleEditPress, task.id, goToTaskCard]);
 
     return (
         <Pressable

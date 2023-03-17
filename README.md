@@ -1,10 +1,12 @@
 # React Native TypeScript MobX Todo
 
-![The main view](./images/1.jpg?raw=true "The main view")
-![The main view with a selected Todo](./images/2.jpg?raw=true "The main view with a selected Todo]")
-![The main view with a selected done Todo](./images/3.jpg?raw=true "The main view with a selected done Todo")
-![The todo creating modal view](./images/4.jpg?raw=true "The todo creating modal view")
-![The todo editing modal](./images/5.jpg?raw=true "The todo editing modal")
+![The splash screen](./images/1.png?raw=true "The splash screen")
+![The tasks list screen](./images/2.png?raw=true "The tasks list screen")
+![The tasks list screen with the selected Todo](./images/3.png?raw=true "The tasks list screen with the selected Todo")
+![The tasks list screen with the selected done Todo](./images/4.png?raw=true "The tasks list screen with the selected done Todo")
+![The task card editing screen](./images/5.png?raw=true "The task card editing screen")
+![The task card creating screen](./images/6.png?raw=true "The task card creating screen")
+![The info screen](./images/7.png?raw=true "The info screen")
 
 ## A Todo Example
 
@@ -36,6 +38,7 @@ yarn android
 - [React Native](https://reactnative.dev/)
 - [MobX](https://mobx.js.org/README.html)
 - [TypeScript](https://www.typescriptlang.org/)
+- [React Navigation](https://reactnavigation.org/)
 
 ## Command
 

@@ -5,9 +5,10 @@ import {
 } from 'react-native';
 import {observer} from 'mobx-react-lite';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {IconProps} from 'react-native-vector-icons/Icon';
 
 type CustomButtonProps = {
-    iconName: 'plus' | 'note-edit-outline' | 'check' | 'repeat' | 'trash-can-outline' | 'refresh' | 'window-close' | 'content-save-outline',
+    iconName: IconProps['name'],
     isInvertedColor?: boolean,
     isBigSize?: boolean,
     isElevated?: boolean,
@@ -30,11 +31,11 @@ const CustomButton = observer(({
                 isElevated && styles.elevation
             ]}
             onPress={onPress}>
-            <Icon
-                name={iconName}
-                size={isBigSize ? 60 : 40}
-                color={isInvertedColor ? 'white' : 'black'}
-            />
+                <Icon
+                    name={iconName}
+                    size={isBigSize ? 50 : 30}
+                    color={isInvertedColor ? 'white' : 'black'}
+                />
         </Pressable>
     );
 });

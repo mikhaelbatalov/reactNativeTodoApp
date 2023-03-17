@@ -108,7 +108,6 @@ class AppStore {
         significance: 0
     };
     selectedId : string | null = null;
-    isOpenedModal : boolean = false;
 
     get filteredTasks() {
         return [
@@ -132,10 +131,6 @@ class AppStore {
         makeAutoObservable(this);
     }
 
-    setIsOpenedModal(value: boolean) {
-        this.isOpenedModal = value;
-    }
-
     setTask(taskData: Task) {
         this.task = taskData;
     }
@@ -151,8 +146,6 @@ class AppStore {
         if (this.isAnyTaskSelected) {
             this.selectedId = null;
         }
-
-        this.isOpenedModal = true;
     }
 
     handleDeleteTaskPress() {
@@ -172,18 +165,15 @@ class AppStore {
 
     handleEditPress(taskId: string | null) {
         this.selectedId = taskId;
-        this.isOpenedModal = true;
     }
 
     handleAddTaskPress() {
         this.tasks.push({...this.task});
-        this.isOpenedModal = false;
     }
 
     handleSaveTaskPress() {
         const editedTaskIndex = this.tasks.findIndex(task => task.id === this.selectedId);
         this.tasks.splice(editedTaskIndex, 1, {...this.task});
-        this.isOpenedModal = false;
     }
 
     handleResetTaskPress() {

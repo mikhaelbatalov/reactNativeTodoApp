@@ -4,11 +4,16 @@ import {observer} from 'mobx-react-lite';
 import {useAppStore} from '../stores/appStore';
 import CustomButton from './CustomButton';
 
-const ButtonsContainer = observer(() => {
+type ButtonContainerProps = {
+    goToTaskCard: () => void
+};
+
+const ButtonsContainer = observer(({goToTaskCard}: ButtonContainerProps) => {
     const store = useAppStore();
 
     function onNewTaskPress() {
         store.handleNewTaskPress();
+        goToTaskCard();
     }
 
     function onDeleteTaskPress() {

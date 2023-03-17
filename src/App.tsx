@@ -1,100 +1,89 @@
-import React, {useState} from 'react';
-import {
-    StyleSheet,
-    Text,
-    FlatList,
-    StatusBar
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useAppStore, Task as TaskType} from './stores/appStore';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import ButtonsContainer from './components/ButtonsContainer';
-import Task from './components/Task';
-import TaskModal from './components/TaskModal'
-import {StatusBarStyle} from 'react-native';
-import {ColorValue} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
-type RenderTaskProps = {
-    item: TaskType,
-    index: number
-};
-
-type TStatusBarStyleData ={
-    statusBarStyle : StatusBarStyle,
-    backgroundColor: ColorValue
-}
-
-const STYLES = ['default', 'dark-content', 'light-content'] as StatusBarStyle[];
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import TaskCardScreen from './components/TaskCardScreen';
+import SplashScreen from './components/SplashScreen';
+import TasksListScreen from './components/TasksListScreen';
+import InfoScreen from './components/InfoScreen';
+import CustomButton from './components/CustomButton';
 
 const App = observer(() => {
-    const store = useAppStore();
-    const [statusBarStyleData, setStatusBarStyle] = useState<TStatusBarStyleData>({
-        backgroundColor: "#000000",
-        statusBarStyle: STYLES[0],
-    });
+    const {Navigator, Group, Screen} = createNativeStackNavigator();
 
-    const renderTask = ({item, index}: RenderTaskProps) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    function HeaderButton({navigation}: any) {
         return (
-            <Task
-                index={index}
-                task={item}
+            <CustomButton
+                iconName='information-outline'
+                isInvertedColor={true}
+                onPress={() =>
+                    navigation.navigate('Info')}
             />
         );
-    };
-    const getKeyExtractor = (item: TaskType) : string => item.id || '';
+    }
+
+    async function showWelcomeScreen() {
+        const delay = (ms: number) => new Promise((resolve) => setTimeout(() => resolve(`Delayed for ${ms / 1000} second.`), ms));
+        try {
+            await delay(2000);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        showWelcomeScreen();
+    }, []);
+
+    if (isLoading) {
+        return <SplashScreen/>;
+    }
 
     return (
-        <SafeAreaView style={styles.appContainer}>
-            <StatusBar
-                animated={true}
-                backgroundColor={statusBarStyleData?.backgroundColor}
-                barStyle={statusBarStyleData?.statusBarStyle}
-            />
-            <Text style={styles.appTitle}>Todos For Today</Text>
-            <FlatList
-                style={styles.flatList}
-                data={store.filteredTasks}
-                renderItem={renderTask}
-                keyExtractor={getKeyExtractor}
-            />
-            <ButtonsContainer/>
-            <TaskModal/>
-        </SafeAreaView>
+        <SafeAreaProvider>
+            <NavigationContainer>
+                <Navigator
+                    initialRouteName="Tasks List"
+                    screenOptions={{
+                        headerTitleAlign: 'center',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                            fontSize: 30,
+                        },
+                    }}>
+                    <Group>
+                        <Screen
+                            name="Tasks List"
+                            component={TasksListScreen}
+                            options={({navigation}) => ({
+                                title: 'Todos For Today',
+                                headerStyle: {
+                                    backgroundColor: '#000',
+                                },
+                                headerTintColor: '#fff',
+                                headerRight: () => (
+                                    <HeaderButton navigation={navigation}/>
+                                )
+                            })}
+                        />
+                        <Screen
+                            name="Info"
+                            component={InfoScreen}
+                        />
+                    </Group>
+                    <Group screenOptions={{presentation: 'modal'}}>
+                        <Screen
+                            name="Task Card"
+                            component={TaskCardScreen}
+                        />
+                    </Group>
+                </Navigator>
+            </NavigationContainer>
+        </SafeAreaProvider>
     );
-});
-
-const styles = StyleSheet.create({
-    appContainer: {
-        flex: 1,
-        backgroundColor: '#000',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-    },
-    flatList: {
-        flex: 1,
-        alignSelf: 'stretch'
-    },
-    appTitle: {
-        color: '#fff',
-        fontSize: 40,
-        fontWeight: 'bold',
-        lineHeight: 40,
-        fontStyle: 'italic',
-        fontVariant: ['small-caps'],
-    },
-    buttonsContainer: {
-        flexDirection: 'row',
-        alignItems: 'baseline'
-    },
-    button: {
-        backgroundColor: "#fff",
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: 5
-    },
-    buttonIcon: {
-        margin: 20
-    }
 });
 
 export default App;
